@@ -1,15 +1,16 @@
 // lib/types.ts
+import type { PortableTextBlock } from "@portabletext/types"
 
 /**
  * Raw Sanity image object (as stored in documents).
  */
 export interface SanityImage {
-  _type: "image";
+  _type: "image"
   asset: {
-    _ref: string;
-    _type: "reference";
-  };
-  alt: string;
+    _ref: string
+    _type: "reference"
+  }
+  alt: string
 }
 
 /**
@@ -17,27 +18,27 @@ export interface SanityImage {
  * Useful if you’re dealing with the document in Studio or webhooks.
  */
 export interface SanityProduct {
-  _id: string;
-  _type: "product";
-  title: string;
+  _id: string
+  _type: "product"
+  title: string
   slug: {
-    _type: "slug";
-    current: string;
-  };
-  shortDescription?: string;
-  longDescription?: any; // PortableText blocks
+    _type: "slug"
+    current: string
+  }
+  shortDescription?: string
+  longDescription?: PortableTextBlock[] // ✅ replaced any
   price: {
-    pricePerCarton: number;
-    pricePerPack: number;
-  };
-  images: SanityImage[];
+    pricePerCarton: number
+    pricePerPack: number
+  }
+  images: SanityImage[]
   category: {
-    _type: "reference";
-    _ref: string;
-  };
-  tags?: string[];
-  isFeatured: boolean;
-  available: boolean;
+    _type: "reference"
+    _ref: string
+  }
+  tags?: string[]
+  isFeatured: boolean
+  available: boolean
 }
 
 /**
@@ -45,30 +46,34 @@ export interface SanityProduct {
  * Matches your `queries.ts` result — ready for components.
  */
 export interface Product {
-  _id: string;
-  title: string;
-  slug: string; // flattened via GROQ
-  shortDescription?: string;
-  longDescription?: any; // blockContent (rich text)
+  _id: string
+  title: string
+  slug: string // flattened via GROQ
+  shortDescription?: string
+  longDescription?: PortableTextBlock[] // ✅ replaced any
   price: {
-    pricePerCarton: number;
-    pricePerPack: number;
-  };
+    pricePerCarton: number
+    pricePerPack: number
+  }
   images: {
     asset: {
-      url: string;
+      url: string
       metadata: {
-        lqip: string;
-        dimensions: { width: number; height: number; aspectRatio: number };
-      };
-    };
-    alt: string;
-  }[];
+        lqip: string
+        dimensions: {
+          width: number
+          height: number
+          aspectRatio: number
+        }
+      }
+    }
+    alt: string
+  }[]
   category: {
-    _id: string;
-    title: string;
-  };
-  tags?: string[];
-  isFeatured: boolean;
-  available: boolean;
+    _id: string
+    title: string
+  }
+  tags?: string[]
+  isFeatured: boolean
+  available: boolean
 }
