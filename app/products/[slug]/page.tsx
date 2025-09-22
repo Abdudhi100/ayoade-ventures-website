@@ -1,6 +1,7 @@
 // app/products/[slug]/page.tsx
 import { client, urlFor } from "@/lib/sanity.client";
-import { productBySlugQuery } from "@/lib/queries";
+import { productBySlugQuery, allProductsQuery } from "@/lib/queries";
+import type { Product } from "@/lib/types";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { buildWhatsappLink } from "@/lib/whatsapp";
@@ -9,14 +10,17 @@ import { CheckCircle2, XCircle, MessageCircle } from "lucide-react";
 
 export const revalidate = 60;
 
+// ✅ Get all slugs (strongly typed)
 export async function generateStaticParams() {
-  const slugs = await client.fetch(productBySlugQuery);
-  return slugs.map((s: any) => ({ slug: s.slug }));
+  const slugs: { slug: string }[] = await client.fetch(allProductsQuery);
+  return slugs.map((s) => ({ slug: s.slug }));
 }
 
+// ✅ Product metadata (typed result)
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const product = await client.fetch(productBySlugQuery, { slug: params.slug });
+  const product: Product | null = await client.fetch(productBySlugQuery, { slug: params.slug });
   if (!product) return {};
+
   return {
     title: `${product.title} — Ayoade Ventures`,
     description: product.shortDescription,
@@ -30,8 +34,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
+// ✅ Page component
 export default async function ProductPage({ params }: { params: { slug: string } }) {
-  const product = await client.fetch(productBySlugQuery, { slug: params.slug });
+  const product: Product | null = await client.fetch(productBySlugQuery, { slug: params.slug });
   if (!product) return notFound();
 
   const mainImg = product.images?.[0];
@@ -121,7 +126,10 @@ export default async function ProductPage({ params }: { params: { slug: string }
         )}
       </div>
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </main>
   );
 }
