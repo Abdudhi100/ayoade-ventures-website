@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { Playfair_Display, Inter } from "next/font/google"
 import "./globals.css"
+import "animate.css"
+import Navbar from "@/components/Navbar"
 
 // Brand fonts: serif for titles, sans for body
 const playfair = Playfair_Display({
@@ -54,11 +56,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="bg-[#FAFAFA] text-[#3D2C2E]">
+    <html lang="en" className="bg-neutral text-dark">
       <body
         className={`${playfair.variable} ${inter.variable} antialiased font-sans`}
       >
-        {children}
+        {/* ✅ Navbar globally included */}
+        <Navbar />
+
+        {/* ✅ Push content below fixed navbar */}
+        <main className="pt-16">{children}</main>
       </body>
     </html>
   )
