@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { buildWhatsappContactLink } from "@/lib/whatsapp"
 
 export default function Home() {
   return (
@@ -22,9 +23,9 @@ export default function Home() {
               View Products
             </Link>
             <a
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=${encodeURIComponent(
+              href={buildWhatsappContactLink(
                 "Hello! I want to place an order with Ayoade Ventures."
-              )}`}
+              )}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#E76F51] text-white px-6 py-3 rounded-xl font-semibold shadow-md hover:bg-[#d85c3f] transition"
@@ -36,7 +37,7 @@ export default function Home() {
 
         <div className="relative w-full max-w-md h-72 md:h-96">
           <Image
-            src="/hero-drink.jpg" // replace with Sanity or /public image
+            src="/hero-drink.jpg" // TODO: swap with Sanity-hosted image later
             alt="Children’s healthy drink bottles"
             fill
             priority
